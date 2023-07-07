@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import Produis from "./components/Produis";
+import Produits from "./components/Products";
 import axios from "axios";
+import NewProduct from "./components/NewProduct";
 
 // http://localhost:4000/phones/
 // const basURL = "http://localhost:4000/phones";
@@ -11,7 +12,7 @@ const client = axios.create({
 });
 
 function App() {
-  const [post, setPost] = useState(null);
+  const [phones, setPhones] = useState(null);
 
   // récuperer des données après api
   // const fetchPosts = async () => {
@@ -22,25 +23,25 @@ function App() {
 
   useEffect(() => {
     client.get("/").then((response) => {
-      setPost(response.data);
+      setPhones(response.data);
     });
   }, []);
 
-  function createPost() {
-    client
-      .post("/", {
-        name: "AC19 Phone5",
-        type: "phone",
-        price: 200.05,
-        rating: 3.8,
-        warranty_years: 2,
-        available: true,
-        body: "This is a new post.",
-      })
-      .then((response) => {
-        setPost(response.data);
-      });
-  }
+  // function createPost() {
+  //   client
+  //     .post("/", {
+  //       name: "AC19 Phone5",
+  //       type: "phone",
+  //       price: 200.05,
+  //       rating: 3.8,
+  //       warranty_years: 2,
+  //       available: true,
+  //       body: "This is a new post.",
+  //     })
+  //     .then((response) => {
+  //       setPhones(response.data);
+  //     });
+  // }
 
   function updatePost() {
     client
@@ -50,29 +51,36 @@ function App() {
         body: "This is an updated post.",
       })
       .then((response) => {
-        setPost(response.data);
+        setPhones(response.data);
       });
   }
 
-  function deletePost() {
-    client.delete(`/64a7eadd2c5cfb34e8160f53`).then(() => {
-      alert("Post deleted!");
-      setPost(null);
-    });
-  }
+  if (!phones) return "No post!";
 
-  if (!post) return "No post!";
-
-  console.log(post);
+  console.log(phones);
 
   return (
     <div className="App">
-      <h1>{post[1].name}</h1>
-      <p>{post[1].type}</p>
-      <button onClick={createPost}>Create Post</button>
+      <div>
+        <h1>Catalogue des smartphones</h1>
+      </div>
+      {/* <button onClick={createPost}>Create Post</button> */}
       <button onClick={updatePost}>Update Post</button>
-      <button onClick={deletePost}>Delete Post</button>
-      <Produis />
+
+      <NewProduct />
+
+      {phones.map((phone, index) => (
+        <Produits
+          key={index}
+          id={phone._id}
+          name={phone.name}
+          type={phone.type}
+          price={phone.price}
+          rating={phone.rating}
+          warranty_years={phone.warranty_years}
+          available={phone.available}
+        />
+      ))}
     </div>
   );
 }
