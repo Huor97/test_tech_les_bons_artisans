@@ -1,8 +1,22 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import {
+  Button,
+  InputAdornment,
+  MenuItem,
+  Paper,
+  Select,
+  Table,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+} from "@mui/material";
+import DataSaverOnSharpIcon from "@mui/icons-material/DataSaverOnSharp";
 
 const client = axios.create({
   baseURL: "http://localhost:4000/phones",
@@ -20,10 +34,19 @@ const schema = yup.object().shape({
 });
 
 function NewProduct() {
+  const [valid, setValid] = useState(true);
+
+  console.log(valid);
+  const handleChange = (e) => {
+    setValid((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
   const {
     register,
     handleSubmit,
-    formState: { errors },
+
     reset,
   } = useForm({
     resolver: yupResolver(schema),
@@ -52,17 +75,86 @@ function NewProduct() {
   };
 
   return (
-    <div>
+    <>
       <form onSubmit={handleSubmit(onSubmitHandler)}>
-        <input placeholder="nom" {...register("name")} />
-        <input placeholder="type" {...register("type")} />
-        <input placeholder="prix" {...register("price")} />
-        <input placeholder="note" {...register("rating")} />
-        <input placeholder="garantie" {...register("warranty_years")} />
-        <input placeholder="en stock" {...register("available")} />
-        <button type="submit">+</button>
+        <TableContainer component={Paper} variant="outlined">
+          <Table aria-label="demo table">
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  <TextField
+                    variant="outlined"
+                    label="nom"
+                    {...register("name")}
+                  />
+                </TableCell>
+
+                <TableCell>
+                  <TextField
+                    variant="outlined"
+                    label="type"
+                    {...register("type")}
+                  />
+                </TableCell>
+
+                <TableCell>
+                  <TextField
+                    type="number"
+                    variant="outlined"
+                    label="prix"
+                    {...register("price")}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">€</InputAdornment>
+                      ),
+                    }}
+                  />
+                </TableCell>
+                <TableCell>
+                  <TextField
+                    type="number"
+                    variant="outlined"
+                    label="note"
+                    {...register("rating")}
+                  />
+                </TableCell>
+
+                <TableCell>
+                  <TextField
+                    type="number"
+                    variant="outlined"
+                    label="garantie"
+                    {...register("warranty_years")}
+                  />
+                </TableCell>
+
+                <TableCell>
+                  <Select
+                    {...register("available")}
+                    defaultValue={valid}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={true}>oui</MenuItem>
+                    <MenuItem value={false}>non</MenuItem>
+                  </Select>
+                </TableCell>
+
+                <TableCell>
+                  <Button
+                    sx={{ width: "160px" }}
+                    variant="contained"
+                    type="submit"
+                    size="large"
+                  >
+                    <DataSaverOnSharpIcon />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+          </Table>
+        </TableContainer>
       </form>
-    </div>
+    </>
   );
 }
 

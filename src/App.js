@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "./App.css";
 import Produits from "./components/Products";
 import axios from "axios";
 import NewProduct from "./components/NewProduct";
@@ -28,7 +27,6 @@ function App() {
       </div>
 
       <NewProduct />
-
       {phones.map((phone, index) => (
         <Produits
           key={index}
