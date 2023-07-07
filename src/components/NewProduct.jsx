@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -29,62 +29,27 @@ function NewProduct() {
     resolver: yupResolver(schema),
   });
 
-  //useState pour l'affichage de confirmation de création de phone
-  const [confirm, setConfirm] = useState(false);
-  const displayConfirm = () => {
-    setConfirm("true");
-  };
-
   //Recevoir les infos du formulaire
   const onSubmitHandler = (data) => {
     console.log({ data });
     reset(); //efface le formulaire
 
-    // Requête post à l'API avec axios
-    // const token = sessionStorage.getItem("token");
-    // const config = { headers: { Authorization: `Bearer ${token}` } };
-    // Requête post à l'API avec axios
     client
-      .post(
-        "/",
-        {
-          name: data.name,
-          type: data.type,
-          price: data.price,
-          rating: data.rating,
-          warranty_years: data.warranty_years,
-          available: data.available,
-        }
-        // config
-      )
+      .post("/", {
+        name: data.name,
+        type: data.type,
+        price: data.price,
+        rating: data.rating,
+        warranty_years: data.warranty_years,
+        available: data.available,
+      })
       .then((res) => {
         console.log(res.data);
-        if (res.data === "Product created !") {
-          // afficher la div de confirmation
-          displayConfirm();
-        }
       })
       .catch((error) => {
         console.log(error);
       });
   };
-  //   const [phones, setPhones] = useState(null);
-
-  //   function createPost() {
-  //     client
-  //       .post("/", {
-  //         name: "AC19 Phone5",
-  //         type: "phone",
-  //         price: 200.05,
-  //         rating: 3.8,
-  //         warranty_years: 2,
-  //         available: true,
-  //         body: "This is a new post.",
-  //       })
-  //       .then((response) => {
-  //         setPhones(response.data);
-  //       });
-  //   }
 
   return (
     <div>
