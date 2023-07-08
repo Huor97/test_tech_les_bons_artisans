@@ -1,8 +1,9 @@
 const express = require("express");
 
 //Créer le serveur
+require("dotenv").config();
 const app = express();
-const port = 4000;
+const port = process.env.PORT;
 
 //Middleware = plugin ajouté au serveur pour récupérer des paramètres de type Body
 app.use(express.json());
@@ -29,9 +30,7 @@ const mongoose = require("mongoose");
 
 mongoose
   .set("strictQuery", false)
-  .connect(
-    "mongodb+srv://huor:R4gX9gZX0GF5dGha@les-bons-artisans.atpdv1l.mongodb.net/?retryWrites=true&w=majority"
-  )
+  .connect(process.env.MONGODB_URL)
   .then(() => {
     //si connecté
     console.log("Connected");
