@@ -1,10 +1,9 @@
-import React, { useState } from "react";
 import axios from "axios";
+import swal from "sweetalert";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import DeleteForeverSharpIcon from "@mui/icons-material/DeleteForeverSharp";
-import UpdateSharpIcon from "@mui/icons-material/UpdateSharp";
+import * as yup from "yup";
 import {
   Button,
   InputAdornment,
@@ -12,15 +11,16 @@ import {
   Paper,
   Select,
   Table,
-  TableBody,
   TableCell,
   TableContainer,
+  TableHead,
   TableRow,
   TextField,
 } from "@mui/material";
+import DataSaverOnSharpIcon from "@mui/icons-material/DataSaverOnSharp";
 
 const client = axios.create({
-  baseURL: "http://localhost:4000/phones",
+  baseURL: "https://test-tech-les-bons-artisans-api.vercel.app/phones",
 });
 
 // On définit un "schéma" pour utiliser la librairie yup afin de récupérer les données du formulaire
@@ -34,16 +34,8 @@ const schema = yup.object().shape({
   available: yup.boolean(),
 });
 
-function Produits({
-  name,
-  type,
-  price,
-  rating,
-  warranty_years,
-  available,
-  id,
-}) {
-  const [valid, setValid] = useState(available);
+function NewProduct() {
+  const [valid, setValid] = useState(true);
 
   console.log(valid);
   const handleChange = (e) => {
@@ -52,21 +44,27 @@ function Produits({
       [e.target.name]: e.target.value,
     }));
   };
+  const {
+    register,
+    handleSubmit,
 
-  const { register, handleSubmit } = useForm({
+    reset,
+  } = useForm({
     resolver: yupResolver(schema),
   });
 
-  console.log(id);
-  function deletePost(phoneId) {
-    client.delete(`/${phoneId}`).then(() => {
-      alert("Post deleted!");
-    });
-  }
+  //Recevoir les infos du formulaire
   const onSubmitHandler = (data) => {
     console.log({ data });
+    swal({
+      icon: "success",
+      timer: 5000,
+      button: false,
+    });
+    reset(); //efface le formulaire
+
     client
-      .patch(`/${id}`, {
+      .post("/", {
         name: data.name,
         type: data.type,
         price: data.price,
@@ -76,42 +74,44 @@ function Produits({
       })
       .then((res) => {
         console.log(res.data);
-        alert("Post update!");
       })
       .catch((error) => {
         console.log(error);
       });
+    setTimeout(() => {
+      window.location.reload(false);
+    }, 6000);
   };
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmitHandler)}>
         <TableContainer component={Paper} variant="outlined">
-          <Table aria-label="demo table">
-            <TableBody>
+          <Table aria-label="demo table ">
+            <TableHead>
               <TableRow>
                 <TableCell>
                   <TextField
                     variant="outlined"
-                    type="text"
+                    label="nom"
                     {...register("name")}
-                    defaultValue={name}
-                  />
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    variant="outlined"
-                    {...register("type")}
-                    defaultValue={type}
                   />
                 </TableCell>
 
                 <TableCell>
                   <TextField
                     variant="outlined"
+                    label="type"
+                    {...register("type")}
+                  />
+                </TableCell>
+
+                <TableCell>
+                  <TextField
                     type="number"
+                    variant="outlined"
+                    label="prix"
                     {...register("price")}
-                    defaultValue={price}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">€</InputAdornment>
@@ -119,22 +119,21 @@ function Produits({
                     }}
                   />
                 </TableCell>
-
                 <TableCell>
                   <TextField
-                    variant="outlined"
                     type="number"
+                    variant="outlined"
+                    label="note"
                     {...register("rating")}
-                    defaultValue={rating}
                   />
                 </TableCell>
 
                 <TableCell>
                   <TextField
-                    variant="outlined"
                     type="number"
+                    variant="outlined"
+                    label="garantie"
                     {...register("warranty_years")}
-                    defaultValue={warranty_years}
                   />
                 </TableCell>
 
@@ -150,17 +149,17 @@ function Produits({
                 </TableCell>
 
                 <TableCell>
-                  <Button variant="contained" type="submit">
-                    <UpdateSharpIcon />
-                  </Button>
-                </TableCell>
-                <TableCell>
-                  <Button variant="contained" onClick={() => deletePost(id)}>
-                    <DeleteForeverSharpIcon />
+                  <Button
+                    sx={{ width: "160px" }}
+                    variant="contained"
+                    type="submit"
+                    size="large"
+                  >
+                    <DataSaverOnSharpIcon />
                   </Button>
                 </TableCell>
               </TableRow>
-            </TableBody>
+            </TableHead>
           </Table>
         </TableContainer>
       </form>
@@ -168,4 +167,4 @@ function Produits({
   );
 }
 
-export default Produits;
+export default NewProduct;

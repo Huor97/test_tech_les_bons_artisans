@@ -1,8 +1,10 @@
-import axios from "axios";
 import React, { useState } from "react";
+import axios from "axios";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import DeleteForeverSharpIcon from "@mui/icons-material/DeleteForeverSharp";
+import UpdateSharpIcon from "@mui/icons-material/UpdateSharp";
 import {
   Button,
   InputAdornment,
@@ -10,16 +12,16 @@ import {
   Paper,
   Select,
   Table,
+  TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   TextField,
 } from "@mui/material";
-import DataSaverOnSharpIcon from "@mui/icons-material/DataSaverOnSharp";
+import swal from "sweetalert";
 
 const client = axios.create({
-  baseURL: "http://localhost:4000/phones",
+  baseURL: "https://test-tech-les-bons-artisans-api.vercel.app/phones",
 });
 
 // On définit un "schéma" pour utiliser la librairie yup afin de récupérer les données du formulaire
@@ -33,8 +35,16 @@ const schema = yup.object().shape({
   available: yup.boolean(),
 });
 
-function NewProduct() {
-  const [valid, setValid] = useState(true);
+function Produits({
+  name,
+  type,
+  price,
+  rating,
+  warranty_years,
+  available,
+  id,
+}) {
+  const [valid, setValid] = useState(available);
 
   console.log(valid);
   const handleChange = (e) => {
@@ -43,22 +53,26 @@ function NewProduct() {
       [e.target.name]: e.target.value,
     }));
   };
-  const {
-    register,
-    handleSubmit,
 
-    reset,
-  } = useForm({
+  const { register, handleSubmit } = useForm({
     resolver: yupResolver(schema),
   });
 
-  //Recevoir les infos du formulaire
+  console.log(id);
+  function deletePost(phoneId) {
+    client.delete(`/${phoneId}`).then(() => {
+      console.log("delete");
+    });
+  }
   const onSubmitHandler = (data) => {
     console.log({ data });
-    reset(); //efface le formulaire
-
+    swal({
+      icon: "success",
+      timer: 5000,
+      button: false,
+    });
     client
-      .post("/", {
+      .patch(`/${id}`, {
         name: data.name,
         type: data.type,
         price: data.price,
@@ -72,6 +86,9 @@ function NewProduct() {
       .catch((error) => {
         console.log(error);
       });
+    setTimeout(() => {
+      window.location.reload(false);
+    }, 6000);
   };
 
   return (
@@ -79,30 +96,30 @@ function NewProduct() {
       <form onSubmit={handleSubmit(onSubmitHandler)}>
         <TableContainer component={Paper} variant="outlined">
           <Table aria-label="demo table">
-            <TableHead>
+            <TableBody>
               <TableRow>
                 <TableCell>
                   <TextField
                     variant="outlined"
-                    label="nom"
+                    type="text"
                     {...register("name")}
+                    defaultValue={name}
                   />
                 </TableCell>
-
                 <TableCell>
                   <TextField
                     variant="outlined"
-                    label="type"
                     {...register("type")}
+                    defaultValue={type}
                   />
                 </TableCell>
 
                 <TableCell>
                   <TextField
-                    type="number"
                     variant="outlined"
-                    label="prix"
+                    type="number"
                     {...register("price")}
+                    defaultValue={price}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">€</InputAdornment>
@@ -110,21 +127,22 @@ function NewProduct() {
                     }}
                   />
                 </TableCell>
+
                 <TableCell>
                   <TextField
-                    type="number"
                     variant="outlined"
-                    label="note"
+                    type="number"
                     {...register("rating")}
+                    defaultValue={rating}
                   />
                 </TableCell>
 
                 <TableCell>
                   <TextField
-                    type="number"
                     variant="outlined"
-                    label="garantie"
+                    type="number"
                     {...register("warranty_years")}
+                    defaultValue={warranty_years}
                   />
                 </TableCell>
 
@@ -140,17 +158,21 @@ function NewProduct() {
                 </TableCell>
 
                 <TableCell>
+                  <Button variant="contained" type="submit">
+                    <UpdateSharpIcon />
+                  </Button>
+                </TableCell>
+                <TableCell>
                   <Button
-                    sx={{ width: "160px" }}
                     variant="contained"
                     type="submit"
-                    size="large"
+                    onClick={() => deletePost(id)}
                   >
-                    <DataSaverOnSharpIcon />
+                    <DeleteForeverSharpIcon />
                   </Button>
                 </TableCell>
               </TableRow>
-            </TableHead>
+            </TableBody>
           </Table>
         </TableContainer>
       </form>
@@ -158,4 +180,4 @@ function NewProduct() {
   );
 }
 
-export default NewProduct;
+export default Produits;
