@@ -4,7 +4,7 @@ import axios from "axios";
 import NewProduct from "./components/NewProduct";
 
 const client = axios.create({
-  baseURL: "http://localhost:4000/phones",
+  baseURL: "https://test-tech-les-bons-artisans-api.vercel.app/phones",
 });
 
 function App() {
