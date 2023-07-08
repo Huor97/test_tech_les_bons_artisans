@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import "./App.css";
 import Produits from "./components/Products";
 import axios from "axios";
 import NewProduct from "./components/NewProduct";
@@ -21,24 +22,32 @@ function App() {
   console.log(phones);
 
   return (
-    <div className="App">
-      <div>
-        <h1>Catalogue des smartphones</h1>
+    <div className="App container">
+      <div className="titles">
+        <h1>
+          Catalogue des smartphones{" "}
+          <span>(total produits {phones.length})</span>
+        </h1>
       </div>
 
-      <NewProduct />
-      {phones.map((phone, index) => (
-        <Produits
-          key={index}
-          id={phone._id}
-          name={phone.name}
-          type={phone.type}
-          price={phone.price}
-          rating={phone.rating}
-          warranty_years={phone.warranty_years}
-          available={phone.available}
-        />
-      ))}
+      <div className="product-header">
+        <NewProduct />
+      </div>
+
+      <div className="product table">
+        {phones.map((phone, index) => (
+          <Produits
+            key={index}
+            id={phone._id}
+            name={phone.name}
+            type={phone.type}
+            price={phone.price}
+            rating={phone.rating}
+            warranty_years={phone.warranty_years}
+            available={phone.available}
+          />
+        ))}
+      </div>
     </div>
   );
 }

@@ -87,7 +87,7 @@ function NewProduct() {
     <>
       <form onSubmit={handleSubmit(onSubmitHandler)}>
         <TableContainer component={Paper} variant="outlined">
-          <Table aria-label="demo table">
+          <Table aria-label="demo table ">
             <TableHead>
               <TableRow>
                 <TableCell>
