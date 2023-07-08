@@ -1,4 +1,5 @@
 import axios from "axios";
+import swal from "sweetalert";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -19,7 +20,7 @@ import {
 import DataSaverOnSharpIcon from "@mui/icons-material/DataSaverOnSharp";
 
 const client = axios.create({
-  baseURL: "http://localhost:4000/phones",
+  baseURL: "https://test-tech-les-bons-artisans-api.vercel.app/phones",
 });
 
 // On définit un "schéma" pour utiliser la librairie yup afin de récupérer les données du formulaire
@@ -55,6 +56,11 @@ function NewProduct() {
   //Recevoir les infos du formulaire
   const onSubmitHandler = (data) => {
     console.log({ data });
+    swal({
+      icon: "success",
+      timer: 5000,
+      button: false,
+    });
     reset(); //efface le formulaire
 
     client
@@ -72,6 +78,9 @@ function NewProduct() {
       .catch((error) => {
         console.log(error);
       });
+    setTimeout(() => {
+      window.location.reload(false);
+    }, 6000);
   };
 
   return (

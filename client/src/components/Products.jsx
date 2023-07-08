@@ -18,9 +18,10 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
+import swal from "sweetalert";
 
 const client = axios.create({
-  baseURL: "http://localhost:4000/phones",
+  baseURL: "https://test-tech-les-bons-artisans-api.vercel.app/phones",
 });
 
 // On définit un "schéma" pour utiliser la librairie yup afin de récupérer les données du formulaire
@@ -60,11 +61,16 @@ function Produits({
   console.log(id);
   function deletePost(phoneId) {
     client.delete(`/${phoneId}`).then(() => {
-      alert("Post deleted!");
+      console.log("delete");
     });
   }
   const onSubmitHandler = (data) => {
     console.log({ data });
+    swal({
+      icon: "success",
+      timer: 5000,
+      button: false,
+    });
     client
       .patch(`/${id}`, {
         name: data.name,
@@ -76,11 +82,13 @@ function Produits({
       })
       .then((res) => {
         console.log(res.data);
-        alert("Post update!");
       })
       .catch((error) => {
         console.log(error);
       });
+    setTimeout(() => {
+      window.location.reload(false);
+    }, 6000);
   };
 
   return (
@@ -155,7 +163,11 @@ function Produits({
                   </Button>
                 </TableCell>
                 <TableCell>
-                  <Button variant="contained" onClick={() => deletePost(id)}>
+                  <Button
+                    variant="contained"
+                    type="submit"
+                    onClick={() => deletePost(id)}
+                  >
                     <DeleteForeverSharpIcon />
                   </Button>
                 </TableCell>
