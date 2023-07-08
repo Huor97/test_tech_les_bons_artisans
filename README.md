@@ -10,7 +10,7 @@
 # Test technique les bons artisans
 
 <div style="display:flex; flex-direction: row; justify-content:space-evenly">
-<div style="width: 30%">
+<div style="width: 100px">
 
 [lien demo front end](https://test-tech-les-bons-artisans.vercel.app/)
 
@@ -18,7 +18,7 @@
 
 </div>
 
-<div style="width: 30%">
+<div style="width: 100px">
 
 [lien demo back end](https://test-tech-les-bons-artisans-api.vercel.app/phones)
 
