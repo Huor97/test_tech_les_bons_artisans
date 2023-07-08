@@ -9,7 +9,7 @@
 
 # Test technique les bons artisans
 
-<div style="display:flex; justify-content:space-evenly">
+<div style="display:flex; flex-direction: row; justify-content:space-evenly">
 <div style="width: 30%">
 
 [lien demo front end](https://test-tech-les-bons-artisans.vercel.app/)
