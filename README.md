@@ -10,19 +10,19 @@
 # Test technique les bons artisans
 
 <div style="display:flex; flex-direction: row; justify-content:space-evenly">
-<div style="width: 100px">
+<div style="width: 45%">
 
 [lien demo front end](https://test-tech-les-bons-artisans.vercel.app/)
 
-[<img src="./client/images/page%20client%20test.png" width="100px" />](https://test-tech-les-bons-artisans.vercel.app/)
+[<img src="./client/images/page%20client%20test.png" width="100%" />](https://test-tech-les-bons-artisans.vercel.app/)
 
 </div>
 
-<div style="width: 100px">
+<div style="width: 45%">
 
 [lien demo back end](https://test-tech-les-bons-artisans-api.vercel.app/phones)
 
-[<img src="./client/images/serveur%20pages.png" width="100px" />](https://test-tech-les-bons-artisans-api.vercel.app/phones)
+[<img src="./client/images/serveur%20pages.png" width="100%" />](https://test-tech-les-bons-artisans-api.vercel.app/phones)
 
 </div>
 
